@@ -6,6 +6,8 @@ The architecture of the proposed pipeline consists of three main components:
 Data Source: The pipeline will read customer reviews data from an S3 bucket. This data will be in JSON format.
 Processing Engine: Spark will be used to process the data, perform sentiment analysis using ML libraries, and store the output in HDFS.
 Storage: The final output of the pipeline, which includes sentiment analysis results, will be stored in HDFS.
+
+
  ![image](https://github.com/srirampamerla/Internship_ineuron/assets/53964156/146df594-6b64-4960-8af7-1b93373b114b)
 
 # Design Details
