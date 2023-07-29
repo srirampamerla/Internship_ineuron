@@ -67,16 +67,20 @@ To install the AWS CLI and interact with S3 from within a Docker container, you 
 
 Install the AWS CLI in the Docker container:
 In your Dockerfile, include the following lines to install the AWS CLI and any other dependencies needed to interact with S3:
-# Use the base image with Hadoop and PySpark installed
-FROM your-base-image
+Use the base image with Hadoop and PySpark installed
 
-# Install the AWS CLI and other necessary dependencies
+--FROM your-base-image
+
+Install the AWS CLI and other necessary dependencies
+
 RUN apt-get update && apt-get install -y python3-pip
 RUN pip3 install awscli
 
 Run the Docker container with AWS CLI and mount a volume:
 After building the Docker image with the AWS CLI installed, you can run a container using that image and mount a volume to access files between the host machine and the container. The AWS CLI will be available within the container to interact with S3.
+
 docker run -v /path/to/host/folder:/path/to/container/folder your-image aws configure
+
 The aws configure command will prompt you to enter your AWS Access Key ID, Secret Access Key, and default region. This will set up the AWS CLI within the container to access your S3 bucket.
 
 Download the file from S3 using the AWS CLI:
@@ -85,7 +89,9 @@ This command will download the file example.txt from the S3 bucket my-bucket to 
 
 Move the downloaded file to HDFS:
 Now that you have downloaded the file to the host folder, you can use Hadoop commands to move the file from the host machine to HDFS. Assuming you want to move the file to the /input directory in HDFS, you can use the following command:
+
 docker exec my-container hdfs dfs -put /path/to/host/folder/example.txt /input/
+
 Replace my-container with the name of your running Docker container, and /path/to/host/folder/example.txt with the actual path to the downloaded file on the host machine. This command will put the file into the HDFS directory /input/ within the container.
 ## Spark:
 In this step, we are using Spark Machine Learning with PySpark to perform sentiment analysis on customer reviews. The results of the sentiment analysis will be stored in Hadoop Distributed File System (HDFS) in a new directory.
@@ -95,9 +101,12 @@ First, make sure you have PySpark set up and configured to run Spark jobs in Pyt
 Next, let's assume you have performed the sentiment analysis and stored the results in a DataFrame called result.
 
 Now, execute the following commands to store the results in HDFS:
+
 docker exec my-container hdfs dfs -mkdir /output: This command creates a new directory named 'output' in HDFS. Replace 'my-container' with the actual name of your Docker container running HDFS.
 
-result.write.mode("overwrite").format("csv").option("header", "true").save("/output/sentiment_results"): This line of code writes the DataFrame 'result' to the HDFS directory '/output/sentiment_results' in CSV format. The mode("overwrite") ensures that any existing data in the directory is overwritten if it already exists. The option("header", "true") specifies that the CSV file should include a header row with column names.
+result.write.mode("overwrite").format("csv").option("header", "true").save("/output/sentiment_results"): 
+
+This line of code writes the DataFrame 'result' to the HDFS directory '/output/sentiment_results' in CSV format. The mode("overwrite") ensures that any existing data in the directory is overwritten if it already exists. The option("header", "true") specifies that the CSV file should include a header row with column names.
 
 Once the code is executed, the results of the sentiment analysis will be stored in HDFS under the directory '/output/sentiment_results'. The data will be available in CSV format and can be further processed or queried as needed.
 
